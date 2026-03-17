@@ -13,6 +13,8 @@ import { DailyForecast } from './components/DailyForecast';
 import { WeatherScene } from './components/WeatherScene';
 import { bgTokens } from './lib/theme';
 
+const overlayDebug = new URLSearchParams(window.location.search).has('overlayDebug');
+
 export default function App() {
   const geo = useGeolocation();
 
@@ -61,6 +63,7 @@ export default function App() {
     >
       <div className="bg" aria-hidden="true" />
       <div className="overlay" aria-hidden="true" />
+      {overlayDebug && <div className="overlayDebug">overlay: {condition}</div>}
 
       <WeatherScene condition={condition} windKmh={wind} />
 
