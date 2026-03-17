@@ -60,6 +60,8 @@ export default function App() {
       } as React.CSSProperties}
     >
       <div className="bg" aria-hidden="true" />
+      <div className="overlay" aria-hidden="true" />
+
       <WeatherScene condition={condition} windKmh={wind} />
 
       <header className="top">

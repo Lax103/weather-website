@@ -33,6 +33,8 @@ export async function fetchWeather(lat: number, lon: number, cityLabel: string):
   url.searchParams.set('latitude', String(lat));
   url.searchParams.set('longitude', String(lon));
   url.searchParams.set('timezone', 'auto');
+
+  // Canadian units
   url.searchParams.set('temperature_unit', 'celsius');
   url.searchParams.set('wind_speed_unit', 'kmh');
   url.searchParams.set('precipitation_unit', 'mm');

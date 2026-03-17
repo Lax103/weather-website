@@ -37,7 +37,7 @@ export function applyDerivedModifiers(
   // These override the base condition for visuals
   if (typeof temp === 'number') {
     if (temp >= 32) return 'hot';
-    if (temp <= -5) return 'cold';
+    if (temp <= -6) return 'cold';
   }
   if (typeof wind === 'number' && wind >= 40) return 'wind';
 
