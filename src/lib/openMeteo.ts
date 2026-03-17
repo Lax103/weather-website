@@ -33,9 +33,9 @@ export async function fetchWeather(lat: number, lon: number, cityLabel: string):
   url.searchParams.set('latitude', String(lat));
   url.searchParams.set('longitude', String(lon));
   url.searchParams.set('timezone', 'auto');
-  url.searchParams.set('temperature_unit', 'fahrenheit');
-  url.searchParams.set('wind_speed_unit', 'mph');
-  url.searchParams.set('precipitation_unit', 'inch');
+  url.searchParams.set('temperature_unit', 'celsius');
+  url.searchParams.set('wind_speed_unit', 'kmh');
+  url.searchParams.set('precipitation_unit', 'mm');
 
   url.searchParams.set(
     'current',
@@ -68,7 +68,7 @@ export async function fetchWeather(lat: number, lon: number, cityLabel: string):
   const currentCode = j?.current?.weathercode as number;
 
   const base = conditionFromWmoCode(currentCode);
-  const condition = applyDerivedModifiers(base, { temperatureF: currentTemp, windMph: currentWind });
+  const condition = applyDerivedModifiers(base, { temperatureC: currentTemp, windKmh: currentWind });
 
   const dailyTimes: string[] = j?.daily?.time ?? [];
   const dailyMax: number[] = j?.daily?.temperature_2m_max ?? [];
@@ -78,7 +78,7 @@ export async function fetchWeather(lat: number, lon: number, cityLabel: string):
 
   const daily = dailyTimes.slice(0, 7).map((date, i) => {
     const b = conditionFromWmoCode(dailyCode[i] ?? 3);
-    const c = applyDerivedModifiers(b, { temperatureF: dailyMax[i], windMph: currentWind });
+    const c = applyDerivedModifiers(b, { temperatureC: dailyMax[i], windKmh: currentWind });
     return {
       date,
       maxTemp: dailyMax[i] ?? 0,
@@ -99,7 +99,7 @@ export async function fetchWeather(lat: number, lon: number, cityLabel: string):
   const hourly = hourlyTimes.slice(startIdx, startIdx + 24).map((time, i) => {
     const idx = startIdx + i;
     const b = conditionFromWmoCode(hourlyCode[idx] ?? 3);
-    const c = applyDerivedModifiers(b, { temperatureF: hourlyTemp[idx], windMph: currentWind });
+    const c = applyDerivedModifiers(b, { temperatureC: hourlyTemp[idx], windKmh: currentWind });
     return {
       time,
       temperature: hourlyTemp[idx] ?? 0,

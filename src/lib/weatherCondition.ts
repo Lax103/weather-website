@@ -27,19 +27,19 @@ export function conditionFromWmoCode(code: number): WeatherCondition {
 export function applyDerivedModifiers(
   base: WeatherCondition,
   opts: {
-    temperatureF?: number;
-    windMph?: number;
+    temperatureC?: number;
+    windKmh?: number;
   },
 ): WeatherCondition {
-  const temp = opts.temperatureF;
-  const wind = opts.windMph;
+  const temp = opts.temperatureC;
+  const wind = opts.windKmh;
 
   // These override the base condition for visuals
   if (typeof temp === 'number') {
-    if (temp >= 90) return 'hot';
-    if (temp <= 20) return 'cold';
+    if (temp >= 32) return 'hot';
+    if (temp <= -5) return 'cold';
   }
-  if (typeof wind === 'number' && wind >= 25) return 'wind';
+  if (typeof wind === 'number' && wind >= 40) return 'wind';
 
   return base;
 }

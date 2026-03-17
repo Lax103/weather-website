@@ -17,7 +17,7 @@ export function DailyForecast({ data }: { data: WeatherData }) {
               <span className="hi">{Math.round(d.maxTemp)}°</span>
               <span className="lo">{Math.round(d.minTemp)}°</span>
             </div>
-            <div className="dailyP">{Math.round(d.precipitation * 100) / 100} in</div>
+            <div className="dailyP">{Math.round(d.precipitation)} mm</div>
           </div>
         ))}
       </div>

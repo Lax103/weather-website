@@ -15,7 +15,7 @@ type Particle = {
   opacity: number;
 };
 
-function chooseType(condition: WeatherCondition): 'none' | 'rain' | 'snow' {
+function choosePrecipType(condition: WeatherCondition): 'none' | 'rain' | 'snow' {
   if (condition === 'snow' || condition === 'cold') return 'snow';
   if (condition === 'rain' || condition === 'drizzle' || condition === 'thunderstorm') return 'rain';
   return 'none';
@@ -43,25 +43,23 @@ function initParticle(
     p.size = 1.1 + Math.random() * 1.0;
     p.vx = Math.cos(windAngle) * base;
     p.vy = Math.sin(windAngle) * base + 7 + Math.random() * 6;
-    p.opacity = 0.25 + Math.random() * 0.35;
+    p.opacity = 0.2 + Math.random() * 0.35;
   }
 }
 
-export function WeatherScene({ condition, windMph }: { condition: WeatherCondition; windMph: number }) {
+export function WeatherScene({ condition, windKmh }: { condition: WeatherCondition; windKmh: number }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const rafRef = useRef<number>(0);
 
-  const type = useMemo(() => chooseType(condition), [condition]);
+  const precipType = useMemo(() => choosePrecipType(condition), [condition]);
   const modifiers = useMemo<Modifiers>(
-    () => ({ isWindy: windMph >= 25 || condition === 'wind', isCold: condition === 'cold' }),
-    [windMph, condition],
+    () => ({ isWindy: windKmh >= 40 || condition === 'wind', isCold: condition === 'cold' }),
+    [windKmh, condition],
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
-    if (type === 'none') return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -76,41 +74,91 @@ export function WeatherScene({ condition, windMph }: { condition: WeatherConditi
 
     ro.observe(canvas);
 
-    const windAngle = modifiers.isWindy ? (type === 'rain' ? Math.PI * 0.63 : Math.PI * 0.55) : Math.PI * 0.5;
-    const count = type === 'snow' ? 120 : 170;
+    const windAngle = modifiers.isWindy ? Math.PI * 0.58 : Math.PI * 0.5; // tilt if windy
+    const precipCount = precipType === 'snow' ? 120 : 170;
 
-    const particles: Particle[] = Array.from({ length: count }, () => {
-      const p = {} as Particle;
-      initParticle(p, canvas.clientWidth, canvas.clientHeight, type, windAngle, true);
-      return p;
-    });
+    const particles: Particle[] = precipType === 'none'
+      ? []
+      : Array.from({ length: precipCount }, () => {
+          const p = {} as Particle;
+          initParticle(p, canvas.clientWidth, canvas.clientHeight, precipType, windAngle, true);
+          return p;
+        });
 
     const draw = () => {
       const w = canvas.clientWidth;
       const h = canvas.clientHeight;
       ctx.clearRect(0, 0, w, h);
 
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.y > h + 12 || p.x < -20 || p.x > w + 20) {
-          initParticle(p, w, h, type, windAngle);
-        }
-
-        ctx.globalAlpha = p.opacity;
-        ctx.fillStyle = type === 'snow' ? '#ffffff' : '#7fb7ff';
-
-        if (type === 'snow') {
+      // Cloud layer (CSS-like, but drawn for subtle motion)
+      if (condition === 'cloudy' || condition === 'partly-cloudy' || condition === 'fog') {
+        const t = Date.now() * 0.00002;
+        ctx.globalAlpha = condition === 'fog' ? 0.18 : 0.12;
+        ctx.fillStyle = '#ffffff';
+        for (let i = 0; i < 6; i++) {
+          const x = ((t * 600 + i * 220) % (w + 260)) - 260;
+          const y = 60 + i * 50;
+          const r = 80 + (i % 3) * 20;
           ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.ellipse(x, y, r * 1.2, r * 0.7, 0, 0, Math.PI * 2);
           ctx.fill();
-        } else {
-          ctx.fillRect(p.x, p.y, p.size, p.size * 7);
         }
+        ctx.globalAlpha = 1;
       }
 
-      ctx.globalAlpha = 1;
+      // Sun shimmer on clear/hot
+      if (condition === 'clear' || condition === 'hot') {
+        const t = Date.now() * 0.001;
+        const pulse = 0.12 + 0.06 * Math.sin(t * 1.2);
+        ctx.globalAlpha = pulse;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(w * 0.78, h * 0.22, 120, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+
+      // Precip particles
+      if (precipType !== 'none') {
+        for (const p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.y > h + 12 || p.x < -20 || p.x > w + 20) {
+            initParticle(p, w, h, precipType, windAngle);
+          }
+
+          ctx.globalAlpha = p.opacity;
+          ctx.fillStyle = precipType === 'snow' ? '#ffffff' : '#7fb7ff';
+
+          if (precipType === 'snow') {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.fillRect(p.x, p.y, p.size, p.size * 7);
+          }
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // Wind streaks
+      if (condition === 'wind') {
+        ctx.globalAlpha = 0.18;
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        const t = Date.now() * 0.002;
+        for (let i = 0; i < 8; i++) {
+          const y = 80 + i * 55;
+          const x = ((t * 260 + i * 120) % (w + 180)) - 180;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.quadraticCurveTo(x + 60, y - 10, x + 140, y);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      }
+
       rafRef.current = requestAnimationFrame(draw);
     };
 
@@ -120,9 +168,8 @@ export function WeatherScene({ condition, windMph }: { condition: WeatherConditi
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
     };
-  }, [type, modifiers.isWindy]);
+  }, [precipType, modifiers.isWindy, condition]);
 
-  if (type === 'none') return null;
-
+  // Render canvas always, since we draw clouds/sun/wind too.
   return <canvas ref={canvasRef} className="scene" aria-hidden="true" />;
 }

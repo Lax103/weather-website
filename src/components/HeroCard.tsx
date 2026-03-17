@@ -25,9 +25,9 @@ export function HeroCard({ location, data }: { location: GeoLocation; data: Weat
 
       <div className="heroMeta">
         {row('Feels like', `${Math.round(c.apparentTemperature)}°`)}
-        {row('Wind', `${Math.round(c.windSpeed)} mph`)}
+        {row('Wind', `${Math.round(c.windSpeed)} km/h`)}
         {row('Humidity', `${Math.round(c.humidity)}%`)}
-        {row('Precip', `${c.precipitation.toFixed(2)} in`)}
+        {row('Precip', `${c.precipitation.toFixed(1)} mm`)}
       </div>
     </section>
   );

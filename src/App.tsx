@@ -60,7 +60,7 @@ export default function App() {
       } as React.CSSProperties}
     >
       <div className="bg" aria-hidden="true" />
-      <WeatherScene condition={condition} windMph={wind} />
+      <WeatherScene condition={condition} windKmh={wind} />
 
       <header className="top">
         <div className="brand">Weather</div>
