@@ -28,9 +28,9 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 600ms ease;
-  /* Make sure it's above .bg but below content */
   z-index: 1;
-  mix-blend-mode: normal;
+  /* multiply darkens the light bg by the gradient's RGB — always visible on white/light */
+  mix-blend-mode: multiply;
 }
 
 /* Debug label when overlay is active */
@@ -73,9 +73,9 @@
 .app[data-condition='partly-cloudy'] .overlay {
   opacity: 1;
   background:
-    radial-gradient(520px 230px at 18% 22%, rgba(120, 148, 190, 0.55), transparent 66%),
-    radial-gradient(620px 260px at 58% 26%, rgba(120, 148, 190, 0.48), transparent 68%),
-    radial-gradient(620px 260px at 92% 18%, rgba(120, 148, 190, 0.45), transparent 68%);
+    radial-gradient(520px 230px at 18% 22%, rgba(100, 130, 180, 0.82), transparent 66%),
+    radial-gradient(620px 260px at 58% 26%, rgba(100, 130, 180, 0.75), transparent 68%),
+    radial-gradient(620px 260px at 92% 18%, rgba(100, 130, 180, 0.70), transparent 68%);
   animation: clouds 10s linear infinite;
 }
 
@@ -83,9 +83,9 @@
 .app[data-condition='cloudy'] .overlay {
   opacity: 1;
   background:
-    radial-gradient(560px 240px at 18% 22%, rgba(95, 125, 170, 0.65), transparent 66%),
-    radial-gradient(680px 290px at 58% 26%, rgba(95, 125, 170, 0.58), transparent 68%),
-    radial-gradient(680px 290px at 92% 18%, rgba(95, 125, 170, 0.52), transparent 68%);
+    radial-gradient(560px 240px at 18% 22%, rgba(75, 105, 155, 0.90), transparent 66%),
+    radial-gradient(680px 290px at 58% 26%, rgba(75, 105, 155, 0.85), transparent 68%),
+    radial-gradient(680px 290px at 92% 18%, rgba(75, 105, 155, 0.80), transparent 68%);
   animation: clouds 10s linear infinite;
 }
 
@@ -102,9 +102,9 @@
 .app[data-condition='fog'] .overlay {
   opacity: 1;
   background:
-    radial-gradient(760px 420px at 30% 40%, rgba(150, 168, 192, 0.70), transparent 72%),
-    radial-gradient(860px 460px at 70% 55%, rgba(150, 168, 192, 0.62), transparent 74%),
-    radial-gradient(820px 400px at 55% 70%, rgba(150, 168, 192, 0.55), transparent 72%);
+    radial-gradient(760px 420px at 30% 40%, rgba(130, 150, 175, 0.88), transparent 72%),
+    radial-gradient(860px 460px at 70% 55%, rgba(130, 150, 175, 0.82), transparent 74%),
+    radial-gradient(820px 400px at 55% 70%, rgba(130, 150, 175, 0.75), transparent 72%);
   filter: blur(6px);
   animation: mist 12s ease-in-out infinite;
 }

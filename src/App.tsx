@@ -13,7 +13,7 @@ import { DailyForecast } from './components/DailyForecast';
 import { WeatherScene } from './components/WeatherScene';
 import { bgTokens } from './lib/theme';
 
-const overlayDebug = new URLSearchParams(window.location.search).has('overlayDebug');
+const overlayDebug = true; // TODO: remove — temporary overlay debug badge
 
 export default function App() {
   const geo = useGeolocation();
