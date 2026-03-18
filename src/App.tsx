@@ -62,7 +62,10 @@ export default function App() {
       } as React.CSSProperties}
     >
       <div className="bg" aria-hidden="true" />
-      <div className="overlay" aria-hidden="true" />
+      <div className="overlay layer1" aria-hidden="true" />
+      <div className="overlay layer2" aria-hidden="true" />
+      <div className="overlay layer3" aria-hidden="true" />
+      <div className="overlay noise" aria-hidden="true" />
       {overlayDebug && <div className="overlayDebug">overlay: {condition}</div>}
 
       <WeatherScene condition={condition} windKmh={wind} />

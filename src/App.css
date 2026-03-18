@@ -19,6 +19,7 @@
   opacity: 0.85;
   pointer-events: none;
   transition: opacity 800ms ease;
+  z-index: 0;
 }
 
 /* Cloud/fog/sun overlays (CSS-only so you always see motion) */
@@ -31,6 +32,26 @@
   z-index: 1;
   /* multiply darkens the light bg by the gradient's RGB — always visible on white/light */
   mix-blend-mode: multiply;
+}
+
+/* Additional layers for richer depth */
+.overlay.layer1 { filter: blur(0.4px) saturate(140%); }
+.overlay.layer2 { filter: blur(1.2px) saturate(130%); opacity: 0.85; }
+.overlay.layer3 { filter: blur(2.2px) saturate(120%); opacity: 0.75; }
+
+/* Subtle film grain / texture */
+.overlay.noise {
+  opacity: 0.25;
+  mix-blend-mode: soft-light;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 1px, transparent 1px, transparent 2px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.04) 1px, transparent 1px, transparent 2px);
+  animation: noiseMove 6s steps(2, end) infinite;
+}
+
+@keyframes noiseMove {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(12px, -12px); }
 }
 
 /* Debug label when overlay is active */
@@ -70,43 +91,81 @@
 }
 
 /* partly-cloudy: drifting soft clouds (lighter) */
-.app[data-condition='partly-cloudy'] .overlay {
+.app[data-condition='partly-cloudy'] .overlay.layer1 {
   opacity: 1;
   background:
     radial-gradient(520px 230px at 18% 22%, rgba(100, 130, 180, 0.82), transparent 66%),
     radial-gradient(620px 260px at 58% 26%, rgba(100, 130, 180, 0.75), transparent 68%),
     radial-gradient(620px 260px at 92% 18%, rgba(100, 130, 180, 0.70), transparent 68%);
-  animation: clouds 10s linear infinite;
+  animation: cloudsSlow 18s linear infinite;
+}
+
+.app[data-condition='partly-cloudy'] .overlay.layer2 {
+  opacity: 1;
+  background:
+    radial-gradient(720px 280px at 10% 35%, rgba(130, 160, 200, 0.65), transparent 70%),
+    radial-gradient(820px 320px at 70% 40%, rgba(130, 160, 200, 0.55), transparent 72%);
+  animation: cloudsFast 12s linear infinite reverse;
 }
 
 /* cloudy: drifting clouds (darker/more obvious) */
-.app[data-condition='cloudy'] .overlay {
+.app[data-condition='cloudy'] .overlay.layer1 {
   opacity: 1;
   background:
     radial-gradient(560px 240px at 18% 22%, rgba(75, 105, 155, 0.90), transparent 66%),
     radial-gradient(680px 290px at 58% 26%, rgba(75, 105, 155, 0.85), transparent 68%),
     radial-gradient(680px 290px at 92% 18%, rgba(75, 105, 155, 0.80), transparent 68%);
-  animation: clouds 10s linear infinite;
+  animation: cloudsSlow 20s linear infinite;
 }
 
-@keyframes clouds {
-  0% {
-    transform: translateX(-10%);
-  }
-  100% {
-    transform: translateX(10%);
-  }
+.app[data-condition='cloudy'] .overlay.layer2 {
+  opacity: 1;
+  background:
+    radial-gradient(780px 320px at 12% 40%, rgba(95, 120, 170, 0.75), transparent 72%),
+    radial-gradient(860px 360px at 68% 45%, rgba(95, 120, 170, 0.65), transparent 74%);
+  animation: cloudsFast 14s linear infinite reverse;
+}
+
+.app[data-condition='cloudy'] .overlay.layer3 {
+  opacity: 1;
+  background:
+    radial-gradient(900px 380px at 40% 60%, rgba(120, 140, 185, 0.55), transparent 75%),
+    radial-gradient(860px 360px at 80% 65%, rgba(120, 140, 185, 0.50), transparent 75%);
+  animation: cloudsMicro 28s linear infinite;
+}
+
+@keyframes cloudsSlow {
+  0% { transform: translateX(-12%); }
+  100% { transform: translateX(12%); }
+}
+
+@keyframes cloudsFast {
+  0% { transform: translateX(10%); }
+  100% { transform: translateX(-10%); }
+}
+
+@keyframes cloudsMicro {
+  0% { transform: translateX(-6%) translateY(0); }
+  50% { transform: translateX(0) translateY(2%); }
+  100% { transform: translateX(6%) translateY(0); }
 }
 
 /* fog: gentle moving mist (more contrast) */
-.app[data-condition='fog'] .overlay {
+.app[data-condition='fog'] .overlay.layer1 {
   opacity: 1;
   background:
     radial-gradient(760px 420px at 30% 40%, rgba(130, 150, 175, 0.88), transparent 72%),
-    radial-gradient(860px 460px at 70% 55%, rgba(130, 150, 175, 0.82), transparent 74%),
-    radial-gradient(820px 400px at 55% 70%, rgba(130, 150, 175, 0.75), transparent 72%);
+    radial-gradient(860px 460px at 70% 55%, rgba(130, 150, 175, 0.82), transparent 74%);
   filter: blur(6px);
-  animation: mist 12s ease-in-out infinite;
+  animation: mist 14s ease-in-out infinite;
+}
+
+.app[data-condition='fog'] .overlay.layer2 {
+  opacity: 1;
+  background:
+    radial-gradient(820px 400px at 55% 70%, rgba(130, 150, 175, 0.75), transparent 72%);
+  filter: blur(8px);
+  animation: mist 18s ease-in-out infinite reverse;
 }
 
 @keyframes mist {
