@@ -66,6 +66,7 @@ export default function App() {
       <div className="overlay layer2" aria-hidden="true" />
       <div className="overlay layer3" aria-hidden="true" />
       <div className="overlay layer4" aria-hidden="true" />
+      <div className="overlay layer5" aria-hidden="true" />
       <div className="overlay rays" aria-hidden="true" />
       <div className="overlay noise" aria-hidden="true" />
       {overlayDebug && <div className="overlayDebug">overlay: {condition}</div>}

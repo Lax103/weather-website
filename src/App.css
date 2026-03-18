@@ -35,19 +35,20 @@
 }
 
 /* Additional layers for richer depth */
-.overlay.layer1 { filter: blur(0.4px) saturate(140%); }
-.overlay.layer2 { filter: blur(1.2px) saturate(135%); opacity: 0.9; }
-.overlay.layer3 { filter: blur(2.4px) saturate(120%); opacity: 0.75; }
-.overlay.layer4 { filter: blur(3.6px) saturate(115%); opacity: 0.6; }
+.overlay.layer1 { filter: blur(0.2px) saturate(145%); }
+.overlay.layer2 { filter: blur(0.8px) saturate(140%); opacity: 0.95; }
+.overlay.layer3 { filter: blur(1.8px) saturate(125%); opacity: 0.8; }
+.overlay.layer4 { filter: blur(3px) saturate(120%); opacity: 0.65; }
+.overlay.layer5 { filter: blur(4.2px) saturate(115%); opacity: 0.55; }
 
 /* Subtle film grain / texture */
 .overlay.noise {
-  opacity: 0.22;
+  opacity: 0.18;
   mix-blend-mode: soft-light;
   background-image:
     repeating-linear-gradient(0deg, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 1px, transparent 1px, transparent 2px),
     repeating-linear-gradient(90deg, rgba(0,0,0,0.04), rgba(0,0,0,0.04) 1px, transparent 1px, transparent 2px);
-  animation: noiseMove 6s steps(2, end) infinite;
+  animation: noiseMove 8s steps(2, end) infinite;
 }
 
 @keyframes noiseMove {
@@ -60,15 +61,15 @@
   opacity: 0;
   mix-blend-mode: screen;
   background:
-    linear-gradient(110deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.12) 22%, rgba(255,255,255,0.0) 45%),
-    linear-gradient(75deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.10) 20%, rgba(255,255,255,0.0) 48%),
-    linear-gradient(140deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.08) 18%, rgba(255,255,255,0.0) 46%);
-  animation: rays 16s ease-in-out infinite;
+    linear-gradient(110deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.14) 22%, rgba(255,255,255,0.0) 45%),
+    linear-gradient(75deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.12) 20%, rgba(255,255,255,0.0) 48%),
+    linear-gradient(140deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.10) 18%, rgba(255,255,255,0.0) 46%);
+  animation: rays 18s ease-in-out infinite;
 }
 
 @keyframes rays {
-  0%, 100% { transform: translateX(-6%); opacity: 0.15; }
-  50% { transform: translateX(6%); opacity: 0.28; }
+  0%, 100% { transform: translateX(-8%); opacity: 0.12; }
+  50% { transform: translateX(8%); opacity: 0.26; }
 }
 
 /* Debug label when overlay is active */
@@ -98,7 +99,7 @@
 }
 
 .app[data-condition='clear'] .overlay.rays {
-  opacity: 0.35;
+  opacity: 0.32;
 }
 
 @keyframes glow {
@@ -115,60 +116,79 @@
 .app[data-condition='partly-cloudy'] .overlay.layer1 {
   opacity: 1;
   background:
-    radial-gradient(520px 230px at 18% 22%, rgba(100, 130, 180, 0.82), transparent 66%),
-    radial-gradient(620px 260px at 58% 26%, rgba(100, 130, 180, 0.75), transparent 68%),
-    radial-gradient(620px 260px at 92% 18%, rgba(100, 130, 180, 0.70), transparent 68%);
-  animation: cloudsSlow 18s linear infinite;
+    radial-gradient(520px 230px at 18% 22%, rgba(95, 125, 180, 0.86), transparent 66%),
+    radial-gradient(620px 260px at 58% 26%, rgba(95, 125, 180, 0.80), transparent 68%),
+    radial-gradient(620px 260px at 92% 18%, rgba(95, 125, 180, 0.74), transparent 68%);
+  animation: cloudsSlow 20s linear infinite;
 }
 
 .app[data-condition='partly-cloudy'] .overlay.layer2 {
   opacity: 1;
   background:
-    radial-gradient(720px 280px at 10% 35%, rgba(130, 160, 200, 0.65), transparent 70%),
-    radial-gradient(820px 320px at 70% 40%, rgba(130, 160, 200, 0.55), transparent 72%);
-  animation: cloudsFast 12s linear infinite reverse;
+    radial-gradient(720px 280px at 10% 35%, rgba(125, 155, 205, 0.72), transparent 70%),
+    radial-gradient(820px 320px at 70% 40%, rgba(125, 155, 205, 0.62), transparent 72%);
+  animation: cloudsFast 14s linear infinite reverse;
 }
 
 .app[data-condition='partly-cloudy'] .overlay.layer3 {
   opacity: 1;
   background:
-    radial-gradient(860px 320px at 30% 52%, rgba(150, 175, 210, 0.45), transparent 72%),
-    radial-gradient(900px 360px at 80% 56%, rgba(150, 175, 210, 0.40), transparent 74%);
-  animation: cloudsMicro 26s linear infinite;
+    radial-gradient(860px 320px at 30% 52%, rgba(150, 175, 215, 0.52), transparent 72%),
+    radial-gradient(900px 360px at 80% 56%, rgba(150, 175, 215, 0.46), transparent 74%);
+  animation: cloudsMicro 28s linear infinite;
+}
+
+.app[data-condition='partly-cloudy'] .overlay.layer4 {
+  opacity: 1;
+  background:
+    radial-gradient(980px 420px at 50% 70%, rgba(170, 190, 220, 0.42), transparent 78%);
+  animation: cloudsDrift 34s linear infinite;
+}
+
+.app[data-condition='partly-cloudy'] .overlay.rays {
+  opacity: 0.18;
 }
 
 /* cloudy: drifting clouds (darker/more obvious) */
 .app[data-condition='cloudy'] .overlay.layer1 {
   opacity: 1;
   background:
-    radial-gradient(560px 240px at 18% 22%, rgba(75, 105, 155, 0.92), transparent 66%),
-    radial-gradient(680px 290px at 58% 26%, rgba(75, 105, 155, 0.88), transparent 68%),
-    radial-gradient(680px 290px at 92% 18%, rgba(75, 105, 155, 0.82), transparent 68%);
-  animation: cloudsSlow 22s linear infinite;
+    radial-gradient(560px 240px at 18% 22%, rgba(70, 100, 155, 0.94), transparent 66%),
+    radial-gradient(680px 290px at 58% 26%, rgba(70, 100, 155, 0.90), transparent 68%),
+    radial-gradient(680px 290px at 92% 18%, rgba(70, 100, 155, 0.84), transparent 68%);
+  animation: cloudsSlow 24s linear infinite;
 }
 
 .app[data-condition='cloudy'] .overlay.layer2 {
   opacity: 1;
   background:
-    radial-gradient(780px 320px at 12% 40%, rgba(95, 120, 170, 0.80), transparent 72%),
-    radial-gradient(860px 360px at 68% 45%, rgba(95, 120, 170, 0.70), transparent 74%);
-  animation: cloudsFast 16s linear infinite reverse;
+    radial-gradient(780px 320px at 12% 40%, rgba(95, 120, 170, 0.84), transparent 72%),
+    radial-gradient(860px 360px at 68% 45%, rgba(95, 120, 170, 0.76), transparent 74%);
+  animation: cloudsFast 18s linear infinite reverse;
 }
 
 .app[data-condition='cloudy'] .overlay.layer3 {
   opacity: 1;
   background:
-    radial-gradient(900px 380px at 40% 60%, rgba(120, 140, 185, 0.60), transparent 75%),
-    radial-gradient(860px 360px at 80% 65%, rgba(120, 140, 185, 0.55), transparent 75%);
-  animation: cloudsMicro 28s linear infinite;
+    radial-gradient(900px 380px at 40% 60%, rgba(120, 140, 190, 0.68), transparent 75%),
+    radial-gradient(860px 360px at 80% 65%, rgba(120, 140, 190, 0.62), transparent 75%);
+  animation: cloudsMicro 30s linear infinite;
 }
 
 .app[data-condition='cloudy'] .overlay.layer4 {
   opacity: 1;
   background:
-    radial-gradient(980px 420px at 50% 70%, rgba(150, 170, 205, 0.48), transparent 78%),
-    radial-gradient(940px 380px at 20% 62%, rgba(150, 170, 205, 0.42), transparent 78%);
-  animation: cloudsDrift 34s linear infinite;
+    radial-gradient(980px 420px at 50% 70%, rgba(150, 170, 205, 0.56), transparent 78%),
+    radial-gradient(940px 380px at 20% 62%, rgba(150, 170, 205, 0.50), transparent 78%);
+  animation: cloudsDrift 36s linear infinite;
+}
+
+.app[data-condition='cloudy'] .overlay.layer5 {
+  opacity: 1;
+  background:
+    radial-gradient(1040px 460px at 60% 76%, rgba(170, 185, 215, 0.42), transparent 80%),
+    radial-gradient(980px 420px at 30% 74%, rgba(170, 185, 215, 0.38), transparent 80%);
+  animation: cloudsDrift 44s linear infinite reverse;
 }
 
 .app[data-condition='cloudy'] .overlay.rays {
